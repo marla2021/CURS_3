@@ -9,7 +9,7 @@ from project.services.base import BaseService
 
 
 class UsersService(BaseService):
-    def get_item_by_id(self, pk):
+    def get_one(self, pk):
         user = UserDAO(self._db_session).get_by_id(pk)
         if not user:
             raise ItemNotFound
