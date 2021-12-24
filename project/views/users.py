@@ -2,16 +2,18 @@ from flask_restx import Resource, Namespace
 from flask import request
 
 from project.dao.models import User
+from project.services import user_service
 from project.setup_db import db
 
-user_ns = Namespace('users')
+user_ns = Namespace('user')
 
 
-@user_ns.route('/user')
+@user_ns.route('/')
 class UsersView(Resource):
     def post(self):
-        req_json = request.json
-        user = User(**req_json)
-        db.session.add(user)
-        db.session.commit()
-        return "", 201, {"location": f"/movies/{user.id}"}
+        data = User().load(request.json)
+        new_user = user_service.create_user(**data)
+        return new_user, 201
+
+@user_ns.route('/')
+class UserView(Resource):
