@@ -4,7 +4,7 @@ from flask import request
 from project.dao.models import User
 from project.schemas.users import UserSchema
 from project.services import user_service
-from project.setup_db import db
+from project.helpers import auth_required
 
 user_ns = Namespace('users')
 
@@ -18,13 +18,18 @@ class UsersView(Resource):
 
 @user_ns.route('/<uid: int>')
 class UserView(Resource):
+    @auth_required
     def get(self,uid):
         user=user_service.get_one(uid)
         sel_user=UserSchema().dump(user)
         return sel_user, 200
+
+    @auth_required
     def put(self, uid):
         update_user= user_service.filter_by(uid).update(request.json)
         return UserSchema().dump(update_user)
+
+    @auth_required
     def patch(self,uid):
         user = user_service.filter_by(uid).partially_update(request.json)
         return user, 204
