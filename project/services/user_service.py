@@ -6,7 +6,7 @@ from project.dao import UserDAO
 from project.exceptions import ItemNotFound
 from project.schemas.users import UserSchema
 from project.services.base import BaseService
-
+from project.dao.models.user import User
 
 class UsersService(BaseService):
     def get_one(self, pk):
@@ -44,3 +44,7 @@ class UsersService(BaseService):
         return hmac.compare_digest(
             base64.b64decode(get_hash),
             hashlib.pbkdf2_hmac('sha256', password.encode(), BaseConfig.PWD_HASH_SALT, BaseConfig.PWD_HASH_ITERATIONS))
+
+    def update(self,user_data):
+        user=User(*user_data)
+        self.dao.update(user=user)

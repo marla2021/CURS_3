@@ -10,4 +10,3 @@ class Auth(BaseMixin, db.Model):
     def __repr__(self):
         return f"<Auth '{self.name.title()}'>"
 
-

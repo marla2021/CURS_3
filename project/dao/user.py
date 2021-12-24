@@ -46,7 +46,10 @@ class UserDAO(BaseDAO):
     def update(self, uid):
         user = self.get_item_by_id(uid)
         user.name = user.get("name")
+        user.emaile = user.get("email")
+        user.password = user.get("password")
         user.surname = user.get("surname")
-        user.surname = user.get("favorite_genre")
+        user.favorite_genre = user.get("favorite_genre")
+
         self.session.add(user)
         self.session.commit()
