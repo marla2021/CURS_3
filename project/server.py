@@ -4,8 +4,7 @@ from flask_restx import Api
 
 from project.setup_db import db
 from project.views import genres_ns, movies_ns, directors_ns
-from project.views.users import user_ns
-
+from project.views.users import users_ns
 api = Api(
     authorizations={
         "Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}
