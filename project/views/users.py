@@ -16,7 +16,7 @@ class UsersView(Resource):
         new_user = user_service.create_user(**data)
         return new_user, 201
 
-@users_ns.route('/<uid: int>')
+@users_ns.route('/<int:user_id>')
 class UserView(Resource):
     @auth_required
     def get(self,uid):

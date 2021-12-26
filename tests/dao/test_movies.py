@@ -11,14 +11,26 @@ class TestMovieDAO:
 
     @pytest.fixture
     def movie_1(self, db):
-        t = Movie(title="Рокетмен")
+        t = Movie(title="Рокетмен",
+                  description="История превращения застенчивого парня Реджинальда Дуайта",
+                  trailer="https://youtu.be/VISiqVeKTq8",
+                  year=2019,
+                  rating=7.9,
+                  genre_id=18,
+                  director_id=4 )
         db.session.add(t)
         db.session.commit()
         return t
 
     @pytest.fixture
     def movie_2(self, db):
-        g = Movie(year=2019)
+        g = Movie(title="Бурлеск",
+                  description="Али - молодая амбициозная девушка из маленького городка",
+                  trailer="https://www.youtube.com/watch?v=sgOhxneHkiE",
+                  year=2010,
+                  rating=6.4,
+                  genre_id=18,
+                  director_id=5)
         db.session.add(g)
         db.session.commit()
         return g
