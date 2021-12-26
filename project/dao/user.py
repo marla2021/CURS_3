@@ -7,6 +7,7 @@ from flask_restx import abort
 from project.config import BaseConfig
 from project.dao.base import BaseDAO
 from project.dao.models import User
+from project.schemas.users import UserSchema
 
 
 class UserDAO(BaseDAO):
@@ -20,18 +21,13 @@ class UserDAO(BaseDAO):
     def get_all(self):
         return self._db_session.query(User).all()
 
-    def create(self, user_d):
-        ent = User(**user_d)
-        data_for_check = User.get_by_email(user_d.email)
-        try:
-            if user_d["email"] == data_for_check:
-                abort(405)
-        except:
-            pass
-
-        self.session.add(ent)
+    def create(self, data):
+        user_schema = UserSchema()
+        user_dict = user_schema.load(data)
+        user = User(**user_dict)
+        self.session.add(user)
         self.session.commit()
-        return ent
+        return user
 
     def get_hash(password):
         return hashlib.pbkdf2_hmac(
