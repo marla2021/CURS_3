@@ -32,18 +32,6 @@ class UsersService(BaseService):
     def create_user(self, user_d):
         return self.dao.create(user_d)
 
-    def get_hash(password):
-        return hashlib.pbkdf2_hmac(
-            'sha256',
-            password.encode('utf-8'),
-            BaseConfig.PWD_HASH_SALT,
-            BaseConfig.PWD_HASH_ITERATIONS
-        ).decode("utf-8", "ignore")
-
-    def compare_passwords(self, get_hash, password):
-        return hmac.compare_digest(
-            base64.b64decode(get_hash),
-            hashlib.pbkdf2_hmac('sha256', password.encode(), BaseConfig.PWD_HASH_SALT, BaseConfig.PWD_HASH_ITERATIONS))
 
     def update(self,uid, user_data):
         user=User(*user_data)
