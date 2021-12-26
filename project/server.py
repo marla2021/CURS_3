@@ -33,6 +33,6 @@ def create_app(config_obj):
     api.add_namespace(genres_ns)
     api.add_namespace(movies_ns)
     api.add_namespace(directors_ns)
-    api.add_namespace(user_ns)
+    api.add_namespace(users_ns)
 
     return app

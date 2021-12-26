@@ -45,6 +45,6 @@ class UsersService(BaseService):
             base64.b64decode(get_hash),
             hashlib.pbkdf2_hmac('sha256', password.encode(), BaseConfig.PWD_HASH_SALT, BaseConfig.PWD_HASH_ITERATIONS))
 
-    def update(self,user_data):
+    def update(self,uid, user_data):
         user=User(*user_data)
         self.dao.update(user=user)

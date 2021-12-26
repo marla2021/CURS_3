@@ -23,8 +23,11 @@ class UserDAO(BaseDAO):
     def create(self, user_d):
         ent = User(**user_d)
         data_for_check = User.get_by_email(user_d.email)
-        if user_d["email"] == data_for_check:
-            abort(405)
+        try:
+            if user_d["email"] == data_for_check:
+                abort(405)
+        except:
+            pass
 
         self.session.add(ent)
         self.session.commit()
@@ -53,3 +56,7 @@ class UserDAO(BaseDAO):
 
         self.session.add(user)
         self.session.commit()
+
+    def update_by_password(self):
+        pass
+
