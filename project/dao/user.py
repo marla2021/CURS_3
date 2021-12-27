@@ -2,7 +2,6 @@ import base64
 import hashlib
 import hmac
 
-from flask_restx import abort
 
 from project.config import BaseConfig
 from project.dao.base import BaseDAO
