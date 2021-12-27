@@ -22,6 +22,6 @@ class MovieView(Resource):
     def get(self, movie_id: int):
         """Get movie by id"""
         try:
-            return MoviesService(db.session).get_item_by_id(movie_id)
+            return MoviesService(db.session).get_by_id(movie_id)
         except ItemNotFound:
             abort(404, message="Movie not found")

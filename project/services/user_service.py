@@ -16,7 +16,7 @@ class UsersService(BaseService):
         return UserSchema().dump(user)
 
     def partially_update(self, uid):
-        user = self.get_item_by_id(uid)
+        user = self.get_by_id(uid)
         if "name" in user:
             user.name = user.get("name")
         if "surname" in user:

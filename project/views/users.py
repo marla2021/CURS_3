@@ -34,8 +34,6 @@ class UserView(Resource):
 @users_ns.route('/password')
 class UserViewPut(Resource):
     @auth_required
-    def put(self,uid, old_pass, new_pass):
-        user= user_service.get_one(uid)
-        if old_pass == user.password:
-            old_pass = new_pass
-        self.dao.update
+    def put(self,old_pass, new_pass):
+        req_json = request.json
+        pass
