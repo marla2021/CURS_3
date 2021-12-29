@@ -1,16 +1,5 @@
-import calendar
-
-from datetime import datetime, timedelta
-
-from flask import request
-from flask_restx import abort
-import jwt
-
-from project.config import BaseConfig
 from project.dao import UserDAO
-from project.dao.models.user import User
 from project.schemas.users import UserSchema
-from project.setup_db import db
 from project.tools.security import compare_password
 from project.tools.tokens import JWTTokens
 

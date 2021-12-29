@@ -25,17 +25,16 @@ class UserDAO(BaseDAO):
             raise DuplicateError
         return user
 
-
-    def update(self, uid):
-        user = self.get_by_id(uid)
-        user.name = user.get("name")
-        user.emaile = user.get("email")
-        user.password = user.get("password")
-        user.surname = user.get("surname")
-        user.favorite_genre = user.get("favorite_genre")
-
-        self.session.add(user)
-        self.session.commit()
+    def partially_update(self, user_id, name=None, surname=None, favorite_genre=None):
+        user = self.get_by_id(user_id)
+        if name:
+            user.name = name
+        if surname:
+            user.surname = surname
+        if favorite_genre:
+            user.favorite_genre = favorite_genre
+        self._db_session.add(user)
+        self._db_session.commit()
 
     def update_by_password(self, user_id,password):
         user = User.query.get(user_id)

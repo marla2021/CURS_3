@@ -1,7 +1,4 @@
-import base64
-import hashlib
-import hmac
-from project.config import BaseConfig
+
 from project.dao import UserDAO
 from project.exceptions import ItemNotFound, NotValidPassword
 from project.schemas.users import UserSchema
@@ -15,15 +12,6 @@ class UsersService(BaseService):
             raise ItemNotFound
         return UserSchema().dump(user)
 
-    def partially_update(self, uid):
-        user = self.get_by_id(uid)
-        if "name" in user:
-            user.name = user.get("name")
-        if "surname" in user:
-            user.surname = user.get("surname")
-        if "favorite_genre" in user:
-            user.surname = user.get("favorite_genre")
-        self.users_service.update(user)
 
     def get_all_users(self):
         users = UserDAO(self._db_session).get_all()
@@ -42,3 +30,14 @@ class UsersService(BaseService):
         if not compare_password(user.password,old_password):
             raise NotValidPassword
         UserDAO(self._db_session).update_by_password(user_id, new_password)
+
+    def partially_update(self, user_id, name=None, surname=None, favorite_genre=None):
+        user = self.get_by_id(user_id)
+        if name:
+            user.name = name
+        if surname:
+            user.surname = surname
+        if favorite_genre:
+            user.favorite_genre = favorite_genre
+        self._db_session.add(user)
+        self._db_session.commit()

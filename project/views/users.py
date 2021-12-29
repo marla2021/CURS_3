@@ -21,21 +21,23 @@ class UsersView(Resource):
 @users_ns.route('/<int:user_id>')
 class UserView(Resource):
     @auth_required
-    def get(self,uid):
-        user=user_service.get_one(uid)
-        sel_user=UserSchema().dump(user)
+    def get(self,user_id):
+        user = UsersService(db.session).get_one(user_id)
+        sel_user = UserSchema().dump(user)
         return sel_user, 200
 
-
     @auth_required
-    def patch(self,uid):
-        user = user_service.filter_by(uid).partially_update(request.json)
+    def patch(self,user_id):
+        user = UsersService(db.session).partially_update(request.json)
         return user, 204
 
 
 @users_ns.route('/password')
 class UserViewPut(Resource):
     @auth_required
-    def put(self,old_pass, new_pass):
-        req_json = request.json
-        pass
+    def put(self, user_id, old_password, new_password):
+        try:
+            user = UsersService(db.session).change_password(user_id, old_password,new_password)
+            return "", 204
+        except ValueError as e:
+            abort(404, message=str(e))
