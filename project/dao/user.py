@@ -1,6 +1,7 @@
 
 from project.dao.base import BaseDAO
 from project.dao.models import User
+from project.exceptions import DuplicateError
 from project.schemas.users import UserSchema
 
 

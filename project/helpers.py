@@ -1,6 +1,6 @@
-import jwt
+
 from flask import request, abort
-from project.config import BaseConfig
+from project.tools.tokens import JWTTokens
 
 def auth_required(func):
     def wrapper(*args, **kwargs):
@@ -10,7 +10,8 @@ def auth_required(func):
         data = request.headers['Authorization']
         token = data.split("Bearer ")[-1]
         try:
-            jwt.decode(token, BaseConfig.SECRET_KEY, algorithms=['HS256'])
+            user = JWTTokens().decode_token()
+            return func(*args, **kwargs, user_id = user["id"])
         except Exception as e:
             print("JWT Decode Exception", e)
             abort(401)
