@@ -1,2 +1,6 @@
 class ItemNotFound(Exception):
     ...
+
+
+class DuplicateError(Exception):
+    ...
