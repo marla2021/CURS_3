@@ -1,4 +1,6 @@
+import base64
 import hashlib
+import hmac
 
 from flask import current_app
 
@@ -11,3 +13,8 @@ def generate_password_digest(password):
         iterations=current_app.config["PWD_HASH_ITERATIONS"],
     )
 
+def generate_password_hash(password):
+    return base64.encode(generate_password_digest(password)).decode(password)
+
+def compare_password(password):
+    return hmac.compare_digest(base64.b64decode(get_hash), generate_password_digest(password))

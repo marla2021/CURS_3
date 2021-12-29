@@ -1,9 +1,4 @@
-import base64
-import hashlib
-import hmac
 
-
-from project.config import BaseConfig
 from project.dao.base import BaseDAO
 from project.dao.models import User
 from project.schemas.users import UserSchema
@@ -20,12 +15,13 @@ class UserDAO(BaseDAO):
     def get_all(self):
         return self._db_session.query(User).all()
 
-    def create(self, data):
-        user_schema = UserSchema()
-        user_dict = user_schema.load(data)
-        user = User(**user_dict)
-        self.session.add(user)
-        self.session.commit()
+    def create(self, email, password):
+        user = User(email=email, password= generate_password_hash(password))
+        self._db_session.add(user)
+        try:
+            self._db_session.commit()
+        except IntegrityError:
+            raise DuplicateError
         return user
 
 
