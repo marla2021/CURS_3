@@ -3,7 +3,7 @@ from flask_restx import Resource, Namespace, abort
 from marshmallow import ValidationError
 
 from project.setup_db import db
-
+from project.exceptions import DecodeError
 from project.dao.models import User
 from project.schemas.users import UserSchema, UserValidatorSchema, JWTTokensValidatore
 from project.services import AuthService
@@ -21,8 +21,11 @@ class AuthViewLogin(Resource):
             abort(message=str(e)), 404
 
     def put(self):
-        current_tokens =JWTTokensValidatore().load(request.json)
-        return AuthService(db.session).regenerate_tokens(current_tokens), 200
+        try:
+            current_tokens =JWTTokensValidatore().load(request.json)
+            return AuthService(db.session).regenerate_tokens(current_tokens), 200
+        except DecodeError:
+            abort(404, "Invalid refresh token")
 
 
 
