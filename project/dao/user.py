@@ -2,7 +2,7 @@
 from project.dao.base import BaseDAO
 from project.dao.models import User
 from project.exceptions import DuplicateError
-from project.schemas.users import UserSchema
+from project.tools.security import generate_password_hash
 
 
 class UserDAO(BaseDAO):
@@ -21,7 +21,7 @@ class UserDAO(BaseDAO):
         self._db_session.add(user)
         try:
             self._db_session.commit()
-        except IntegrityError:
+        except Exception:
             raise DuplicateError
         return user
 
@@ -37,6 +37,11 @@ class UserDAO(BaseDAO):
         self.session.add(user)
         self.session.commit()
 
-    def update_by_password(self):
-        pass
+    def update_by_password(self, user_id,password):
+        user = User.query.get(user_id)
+        user.password = generate_password_hash(password)
+        self._db_session.add(user)
+        self._db_session.commit()
+
+
 

@@ -8,3 +8,6 @@ class DuplicateError(Exception):
 
 class DecodeError(Exception):
     ...
+
+class NotValidPassword(Exception):
+    ...

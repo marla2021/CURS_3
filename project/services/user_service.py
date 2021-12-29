@@ -3,7 +3,7 @@ import hashlib
 import hmac
 from project.config import BaseConfig
 from project.dao import UserDAO
-from project.exceptions import ItemNotFound
+from project.exceptions import ItemNotFound, NotValidPassword
 from project.schemas.users import UserSchema
 from project.services.base import BaseService
 from project.dao.models.user import User
@@ -29,10 +29,16 @@ class UsersService(BaseService):
         users = UserDAO(self._db_session).get_all()
         return UserSchema(many=True).dump(users)
 
-    def create_user(self, user_d):
-        return self.dao.create(user_d)
+
+    def create_user(self, email, password):
+        user = UserDAO(self._db_session).create(email, password)
+        return UserSchema().dump(user)
 
 
-    def update(self,uid, user_data):
-        user=User(*user_data)
-        self.dao.update(user=user)
+    def change_password(self,user_id, old_password, new_password):
+        user = UserDAO(self._db_session).get_by_id(user_id)
+        if not user:
+            raise ItemNotFound
+        if not compare_passwords(user.password,old_password):
+            raise NotValidPassword
+        UserDAO(self._db_session).update_by_password(user_id, new_password)

@@ -1,9 +1,10 @@
 from flask_restx import Resource, Namespace
-from flask import request
+from flask import request, abort
 
-from project.dao.models import User
+from project.exceptions import ItemNotFound
+from project.setup_db import db
 from project.schemas.users import UserSchema
-from project.services import user_service
+from project.services import user_service, UsersService
 from project.helpers import auth_required
 
 users_ns = Namespace('users')
@@ -11,10 +12,11 @@ users_ns = Namespace('users')
 
 @users_ns.route('/')
 class UsersView(Resource):
-    def post(self):
-        data = User().load(request.json)
-        new_user = user_service.create_user(**data)
-        return new_user, 201
+    def get(self, user_id:int):
+        try:
+            return UsersService(db.session).get_one(user_id)
+        except ItemNotFound:
+            abort(404, "User not found")
 
 @users_ns.route('/<int:user_id>')
 class UserView(Resource):
