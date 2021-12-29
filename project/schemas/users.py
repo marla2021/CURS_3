@@ -8,3 +8,8 @@ class UserSchema(Schema):
     name = fields.Str(required=True)
     surname = fields.Str(required=True)
     favorite_genre = fields.Str(required=True)
+
+
+class UserValidatorSchema(Schema):
+    email = fields.Str(required=True)
+    password = fields.Str(required=True)

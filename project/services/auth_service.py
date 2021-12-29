@@ -5,42 +5,29 @@ from datetime import datetime, timedelta
 
 from flask import request
 from flask_restx import abort
-from jwt import jwt
+import jwt
 
 from project.config import BaseConfig
+from project.dao import UserDAO
 from project.dao.models.user import User
+from project.schemas.users import UserSchema
 from project.services import user_service
 from project.setup_db import db
-
-
-algo = 'HS256'
+from project.tools.security import compare_password
+from project.tools.tokens import JWTTokens
 
 
 class AuthService:
-    @staticmethod
-    def _generate_tokens(data):
-        now = datetime.now()
 
-        min = now + timedelta(minutes=BaseConfig.TOKEN_EXPIRE_MINUTES)
-        data["exp"] = calendar.timegm(min.timetuple())
-        access_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
+    def create(self, email, password):
+        user = UserDAO(self._db_session).get_by_email(email)
+        if not user:
+            raise Exception
+        if not compare_password(user.password, password):
+            raise Exception
+        data = UserSchema().dump(user)
+        return JWTTokens().generate_tokens(data)
 
-        days = now + timedelta(days=BaseConfig.TOKEN_EXPIRE_DAYS)
-        data["exp"] = calendar.timegm(days.timetuple())
-        refresh_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
-
-        return {"access_token": access_token, "refresh_token": refresh_token}
-
-    def create(self, username, password):
-        user = db.session.query(User).filter(User.username == username).first()
-
-        ok = user_service.compare_passwords(password_hash=user.password, other_password=password)
-        if not ok:
-            abort(401)
-        return self._generate_tokens({
-            "username": user.username,
-            "role": user.role
-        })
 
     def update(self):
         req_json = request.json
