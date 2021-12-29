@@ -6,7 +6,7 @@ from project.dao import UserDAO
 from project.exceptions import ItemNotFound, NotValidPassword
 from project.schemas.users import UserSchema
 from project.services.base import BaseService
-from project.dao.models.user import User
+from project.tools.security import compare_password
 
 class UsersService(BaseService):
     def get_one(self, pk):
@@ -39,6 +39,6 @@ class UsersService(BaseService):
         user = UserDAO(self._db_session).get_by_id(user_id)
         if not user:
             raise ItemNotFound
-        if not compare_passwords(user.password,old_password):
+        if not compare_password(user.password,old_password):
             raise NotValidPassword
         UserDAO(self._db_session).update_by_password(user_id, new_password)

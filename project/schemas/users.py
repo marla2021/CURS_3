@@ -13,3 +13,8 @@ class UserSchema(Schema):
 class UserValidatorSchema(Schema):
     email = fields.Str(required=True)
     password = fields.Str(required=True)
+
+
+class JWTTokensValidatore(Schema):
+    access_token = fields.String()
+    refresh_token = fields.String(required=True)
