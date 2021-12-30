@@ -12,7 +12,7 @@ class MoviesView(Resource):
     @movies_ns.response(200, "OK")
     def get(self):
         """Get all movies"""
-        return MoviesService(db.session).get_all_movies()
+        return MoviesService(db.session).get_all()
 
 
 @movies_ns.route("/<int:movie_id>")

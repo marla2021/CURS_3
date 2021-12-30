@@ -34,7 +34,7 @@ class AuthViewRegister(Resource):
     def post(self):
         try:
             data = UserValidatorSchema().load(request.json)
-            new_user = UsersService(db.session).create_user(**data)
+            new_user = UsersService(db.session).create(**data)
             return new_user
         except ValidationError as e:
             abort(message=str(e)), 404

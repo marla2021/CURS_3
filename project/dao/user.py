@@ -16,14 +16,15 @@ class UserDAO(BaseDAO):
     def get_all(self):
         return self._db_session.query(User).all()
 
-    def create(self, email, password):
-        user = User(email=email, password=generate_password_hash(password))
-        self._db_session.add(user)
+    def create(self, **data):
         try:
+            user_d = User(**data)
+            self._db_session.add(user_d)
             self._db_session.commit()
+            return user_d
         except Exception:
             raise DuplicateError
-        return user
+
 
     def partially_update(self, user_id, name=None, surname=None, favorite_genre=None):
         user = self.get_by_id(user_id)

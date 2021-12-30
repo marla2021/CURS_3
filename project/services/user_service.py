@@ -1,9 +1,10 @@
 
 from project.dao import UserDAO
-from project.exceptions import ItemNotFound, NotValidPassword
+from project.exceptions import ItemNotFound, NotValidPassword, DuplicateError
 from project.schemas.users import UserSchema
 from project.services.base import BaseService
-from project.tools.security import compare_password
+from project.tools.security import compare_password, generate_password_digest
+
 
 class UsersService(BaseService):
     def get_one(self, pk):
@@ -32,7 +33,7 @@ class UsersService(BaseService):
         UserDAO(self._db_session).update_by_password(user_id, new_password)
 
     def partially_update(self, user_id, name=None, surname=None, favorite_genre=None):
-        user = self.get_one(user_id)
+        user = UserDAO(self._db_session).get_by_id(user_id)
         if name:
             user.name = name
         if surname:
@@ -41,3 +42,14 @@ class UsersService(BaseService):
             user.favorite_genre = favorite_genre
         self._db_session.add(user)
         self._db_session.commit()
+
+
+    def create(self, **data_in):
+        try:
+            user_pass = data_in.get("password")
+            if user_pass:
+                data_in["password"] = generate_password_digest(user_pass)
+            user = UserDAO(self._db_session).create(**data_in)
+            return UserSchema().dump(user)
+        except Exception:
+            raise DuplicateError

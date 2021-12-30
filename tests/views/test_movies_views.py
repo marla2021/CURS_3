@@ -8,7 +8,7 @@ class TestMoviesView:
 
     @pytest.fixture
     def movie(self, db):
-        g = Movie(title="Йеллоустоун")
+        g = Movie(title="1Йеллоустоун")
         db.session.add(g)
         db.session.commit()
         return g

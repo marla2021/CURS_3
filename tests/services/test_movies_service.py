@@ -27,15 +27,15 @@ class TestMoviesService:
             yield mock
 
     def test_get_all_movies(self, movie_dao_mock, movie):
-        assert self.service.get_all_movies() == MovieSchema(many=True).dump([movie])
+        assert self.service.get_all() == MovieSchema(many=True).dump([movie])
         movie_dao_mock().get_all.assert_called_once()
 
     def test_get_item_by_id(self, movie_dao_mock, movie):
-        assert self.service.get_item_by_id(movie.id) == MovieSchema().dump(movie)
+        assert self.service.get_by_id(movie.id) == MovieSchema().dump(movie)
         movie_dao_mock().get_by_id.assert_called_once_with(movie.id)
 
     def test_get_item_by_id_not_found(self, movie_dao_mock):
         movie_dao_mock().get_by_id.return_value = None
 
         with pytest.raises(ItemNotFound):
-            self.service.get_item_by_id(1)
+            self.service.get_by_id(1)

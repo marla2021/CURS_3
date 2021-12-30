@@ -8,5 +8,4 @@ class MovieDAO(BaseDAO):
         return self._db_session.query(Movie).filter(Movie.id == pk).one_or_none()
 
     def get_all(self):
-        page = request.args
-        return self._db_session.query(Movie).paginate(page, 12, False).all()
+        return self._db_session.query(Movie).all()
