@@ -1,10 +1,11 @@
 from project.dao import UserDAO
 from project.schemas.users import UserSchema
+from project.services.base import BaseService
 from project.tools.security import compare_password
 from project.tools.tokens import JWTTokens
 
 
-class AuthService:
+class AuthService(BaseService):
 
     def create(self, email, password):
         user = UserDAO(self._db_session).get_by_email(email)

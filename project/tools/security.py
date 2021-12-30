@@ -14,7 +14,7 @@ def generate_password_digest(password):
     )
 
 def generate_password_hash(password):
-    return base64.encode(generate_password_digest(password)).decode(password)
+    return generate_password_digest(password).decode("utf-8", "ignore")
 
 def compare_password(password_hash, password):
     return hmac.compare_digest(base64.b64decode(password_hash), generate_password_digest(password))

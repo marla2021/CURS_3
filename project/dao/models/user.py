@@ -2,7 +2,7 @@ from project.dao.models.base import BaseMixin
 from project.setup_db import db
 
 
-class User(BaseMixin, db.Model):
+class User(BaseMixin):
     __tablename__ = "users"
 
     email = db.Column(db.String(100), unique=True, nullable=False)

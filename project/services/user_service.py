@@ -32,7 +32,7 @@ class UsersService(BaseService):
         UserDAO(self._db_session).update_by_password(user_id, new_password)
 
     def partially_update(self, user_id, name=None, surname=None, favorite_genre=None):
-        user = self.get_by_id(user_id)
+        user = self.get_one(user_id)
         if name:
             user.name = name
         if surname:

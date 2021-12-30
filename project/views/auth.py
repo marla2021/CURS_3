@@ -4,9 +4,9 @@ from marshmallow import ValidationError
 
 from project.setup_db import db
 from project.exceptions import DecodeError
-from project.dao.models import User
-from project.schemas.users import UserSchema, UserValidatorSchema, JWTTokensValidatore
-from project.services import AuthService
+
+from project.schemas.users import  UserValidatorSchema, JWTTokensValidatore
+from project.services import AuthService, UsersService
 
 auth_ns = Namespace('auth')
 
@@ -33,8 +33,8 @@ class AuthViewLogin(Resource):
 class AuthViewRegister(Resource):
     def post(self):
         try:
-            data = UserSchema.load(request.json)
-            new_user = User(**data)
-            return new_user, 201
+            data = UserValidatorSchema().load(request.json)
+            new_user = UsersService(db.session).create_user(**data)
+            return new_user
         except ValidationError as e:
             abort(message=str(e)), 404

@@ -17,7 +17,7 @@ class UserDAO(BaseDAO):
         return self._db_session.query(User).all()
 
     def create(self, email, password):
-        user = User(email=email, password= generate_password_hash(password))
+        user = User(email=email, password=generate_password_hash(password))
         self._db_session.add(user)
         try:
             self._db_session.commit()
@@ -36,11 +36,8 @@ class UserDAO(BaseDAO):
         self._db_session.add(user)
         self._db_session.commit()
 
-    def update_by_password(self, user_id,password):
-        user = User.query.get(user_id)
+    def update_by_password(self, user_id, password):
+        user = self.get_by_id(user_id)
         user.password = generate_password_hash(password)
         self._db_session.add(user)
         self._db_session.commit()
-
-
-

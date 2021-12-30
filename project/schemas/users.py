@@ -2,12 +2,12 @@ from marshmallow import fields, Schema
 
 
 class UserSchema(Schema):
-    id = fields.Int(required=True)
+    id = fields.Int()
     email = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
-    name = fields.Str(required=True)
-    surname = fields.Str(required=True)
-    favorite_genre = fields.Str(required=True)
+    name = fields.Str()
+    surname = fields.Str()
+    favorite_genre = fields.Int()
 
 
 class UserValidatorSchema(Schema):

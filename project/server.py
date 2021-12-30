@@ -5,6 +5,9 @@ from flask_restx import Api
 from project.setup_db import db
 from project.views import genres_ns, movies_ns, directors_ns
 from project.views.users import users_ns
+from project.views.auth import auth_ns
+
+
 api = Api(
     authorizations={
         "Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}
@@ -33,5 +36,6 @@ def create_app(config_obj):
     api.add_namespace(movies_ns)
     api.add_namespace(directors_ns)
     api.add_namespace(users_ns)
+    api.add_namespace(auth_ns)
 
     return app
