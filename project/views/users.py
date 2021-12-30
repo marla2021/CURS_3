@@ -12,9 +12,9 @@ users_ns = Namespace('users')
 
 @users_ns.route('/')
 class UsersView(Resource):
-    def get(self, user_id:int):
+    def get(self):
         try:
-            return UsersService(db.session).get_one(user_id)
+            return UsersService(db.session).get_all_users()
         except ItemNotFound:
             abort(404, "User not found")
 
