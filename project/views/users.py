@@ -18,8 +18,6 @@ class UsersView(Resource):
         except ItemNotFound:
             abort(404, "User not found")
 
-@users_ns.route('/<int:user_id>')
-class UserView(Resource):
     @auth_required
     def get(self,user_id):
         user = UsersService(db.session).get_one(user_id)
